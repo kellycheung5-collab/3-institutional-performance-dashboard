@@ -236,3 +236,5 @@ data/raw/*
 *.db-shm
 *.db-wal
 *.sqlite3-journal
+
+!data/raw/enrollment.db
