@@ -216,3 +216,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ==========================================
+# Custom Additions for Dashboard Project
+# ==========================================
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# VS Code directory (uncomment to ignore workspace settings)
+.vscode/
+
+# Project Data Files
+data/raw/*
+!data/raw/.gitkeep
+
+# Ignore generic generated/temporary SQLite databases
+*.db-shm
+*.db-wal
+*.sqlite3-journal
