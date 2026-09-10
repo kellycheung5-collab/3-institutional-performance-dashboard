@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DB_PATH = BASE_DIR / "data" / "processed" / "enrollment.db"
+DB_PATH = BASE_DIR / "data" / "raw" / "enrollment.db"
 
 def get_connection():
     return sqlite3.connect(DB_PATH)

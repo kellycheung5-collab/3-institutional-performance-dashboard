@@ -1,13 +1,16 @@
+import os
 import dash
 from dash import dcc, html, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
-from data_loader import load_enrollment_data, load_financial_fte_data
+from app.data_loader import load_enrollment_data, load_financial_fte_data
 
-# Load Data from SQLite Database
-df_headcount = load_enrollment_data()
-df_financials = load_financial_fte_data()
+# Read secret key and debug status from environment variables
+secret_key = os.getenv("SECRET_KEY", "default-fallback-key")
+debug_mode = os.getenv("DASH_DEBUG", "False").lower() in ["true", "1"]
+
+app = dash.Dash(__name__)
 
 # Initialize App with Bootstrap Theme
 app = dash.Dash(
@@ -15,6 +18,21 @@ app = dash.Dash(
     title="BC Post-Secondary Performance Dashboard",
     external_stylesheets=[dbc.themes.FLATLY]
 )
+
+server = app.server
+
+if os.getenv("FLASK_ENV") == "production" and secret_key == "fallback-dev-key":
+    raise RuntimeError(
+        "CRITICAL SECURITY FAILURE: Production environment detected, but SECRET_KEY "
+        "is set to the default fallback key. Please configure a secure SECRET_KEY."
+    )
+
+app.server.secret_key = secret_key
+
+# Load Data from SQLite Database
+df_headcount = load_enrollment_data()
+df_financials = load_financial_fte_data()
+
 
 app.layout = dbc.Container([
     # Header Title
