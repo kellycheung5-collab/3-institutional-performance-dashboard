@@ -29,5 +29,6 @@ jobs:
         env:
           SECRET_KEY: "ci-testing-secret-key"
           FLASK_ENV: "development"
+          PYTHONPATH: "."
         run: |
-          pytest
+          python -m pytest
