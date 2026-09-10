@@ -16,7 +16,7 @@ The application is deployed live on Render and automatically updates whenever ch
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 
 - **Frontend & Visualizations:** Dash, Plotly Express, Dash Bootstrap Components (`FLATLY` theme)
 - **Backend & Server:** Python 3.12, Flask, Gunicorn WSGI
@@ -52,9 +52,9 @@ The application is deployed live on Render and automatically updates whenever ch
 
 ---
 
-## 🚀 Local Development Setup
+## Local Development Setup
 
-### Option 1: Standard Python Environment
+### Option 1: Standard Python Environment (Direct Execution)
 
 **1. Clone the repository:**
 
@@ -84,7 +84,7 @@ python app/app.py
 
 Access the dashboard at [http://127.0.0.1:8050/](http://127.0.0.1:8050/).
 
-### Option 2: Local Docker Container
+### Option 2: Local Docker Container (Without Nginx)
 
 **1. Build the Docker image:**
 
@@ -95,10 +95,35 @@ docker build -t bc-performance-dashboard .
 **2. Run the container:**
 
 ```powershell
-docker run -d -p 8050:8050 --name bc-dashboard-app bc-performance-dashboard
+docker run -d -p 10000:10000 --name bc-dashboard-standalone bc-performance-dashboard
 ```
 
-Access the dashboard at [http://localhost:8050/](http://localhost:8050/).
+Access the dashboard at [http://localhost:10000/](http://localhost:10000/).
+
+### Option 3: Local Docker Container (Without Nginx Reverse Proxy)
+
+**1. Build the Docker image:**
+
+Test the production-like multi-container setup where Nginx listens on standard HTTP port 80 and proxies traffic to Gunicorn listening on port 10000.
+
+
+```powershell
+docker-compose up -d --build
+```
+
+**2. Verify container status:**
+
+```powershell
+docker-compose ps
+```
+
+Access the dashboard at [http://localhost/](http://localhost/).
+
+**3. Stop the stack:**
+
+```powershell
+docker-compose down
+```
 
 ---
 
@@ -132,12 +157,14 @@ The application enforces secure fallback checks for production environments (`FL
 | `SECRET_KEY` | Flask session & security key | `default-fallback-key` | Must be configured with a strong hex string |
 | `FLASK_ENV` | Environment context | `development` | Set to `production` |
 | `DASH_DEBUG` | Dash interactive debugger toggle | `False` | Set to `False` |
+| `PORT` | Web server listening port | 10000 | Dynamically injected by Render |
 
 ---
 
 ## Cloud Deployment Details (Render)
 
 - **Runtime:** Docker
+- **Server Command:** `gunicorn --bind 0.0.0.0:${PORT:-10000}`
 - **Build Trigger:** Automatic deployment upon successful push/merge to `main`.
 - **SSL/TLS:** Managed automatically by Render.
 - **Data Persistence:** Read-only SQLite database bundled directly within the built Docker image.
