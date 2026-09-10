@@ -2,18 +2,21 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Copy dependencies list
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application source
+# Upgrade pip and install requirements + gunicorn explicitly
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt gunicorn
+
+# Copy project files
 COPY . .
+
+# Set Python search path
+ENV PYTHONPATH=/app
 
 # Expose default port
 EXPOSE 10000
 
-# Set Python module path
-ENV PYTHONPATH=/app
-
-# Bind dynamically to $PORT (defaults to 10000 on Render)
+# Run Gunicorn with dynamic port binding
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-10000} --workers 2 --threads 4 app.app:server"]
