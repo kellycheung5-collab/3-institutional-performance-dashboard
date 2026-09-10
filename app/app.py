@@ -2,7 +2,6 @@ import dash
 from dash import dcc, html, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
-import pandas as pd
 from data_loader import load_enrollment_data, load_financial_fte_data
 
 # Load Data from SQLite Database
