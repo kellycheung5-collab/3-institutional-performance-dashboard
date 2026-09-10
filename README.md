@@ -14,6 +14,16 @@ The application is deployed live on Render and automatically updates whenever ch
 - **Hosting Platform:** Render (Docker Web Service)
 - **Status:** Active & Monitored
 
+<p align="center">
+  <img src="assets/images/dashboard_overview.png" alt="Dashboard Overview & Analytics" width="100%"/>
+</p>
+
+### Interactive Data Table
+
+<p align="center">
+  <img src="assets/images/dashboard_table.png" alt="Institutional Data Table" width="100%"/>
+</p>
+
 ---
 
 ## Tech Stack & Architecture
@@ -33,7 +43,11 @@ The application is deployed live on Render and automatically updates whenever ch
 3-institutional-performance-dashboard/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml              # GitHub Actions CI workflow config
+│       └── ci.yml              # GitHub Actions CI workflow 
+├── docs/
+│   └── assets/
+│       └── dashboard_preview.png
+config
 ├── app/
 │   ├── __init__.py
 │   ├── app.py                  # Main Dash layout & interactive callbacks
