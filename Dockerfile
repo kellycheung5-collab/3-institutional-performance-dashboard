@@ -12,5 +12,5 @@ COPY . .
 # Expose app port
 EXPOSE 8050
 
-# Option A: Bind directly to 10000
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app.app:server"]
+# Run Gunicorn binding to 0.0.0.0
+CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "2", "--threads", "4", "app.app:server"]

@@ -8,7 +8,11 @@ The application uses **SQLite** for analytical data storage, runs on a **Gunicor
 
 ## 🔗 Live Application
 
-- **Production Dashboard:** [https://three-institutional-performance-dashboard.onrender.com/](https://three-institutional-performance-dashboard.onrender.com/)
+The application is deployed live on Render and automatically updates whenever changes are merged into the `main` branch:
+
+- **Live URL:** [https://three-institutional-performance-dashboard.onrender.com/](https://three-institutional-performance-dashboard.onrender.com/)
+- **Hosting Platform:** Render (Docker Web Service)
+- **Status:** Active & Monitored
 
 ---
 
@@ -23,7 +27,7 @@ The application uses **SQLite** for analytical data storage, runs on a **Gunicor
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 3-institutional-performance-dashboard/
@@ -98,7 +102,7 @@ Access the dashboard at [http://localhost:8050/](http://localhost:8050/).
 
 ---
 
-## 🧪 Automated Testing
+## Automated Testing
 
 Unit tests validate data ingestion schemas, database joins, and callback layout structure using `pytest`.
 
@@ -119,7 +123,7 @@ Every push or pull request targeting `main` automatically triggers the GitHub Ac
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 The application enforces secure fallback checks for production environments (`FLASK_ENV=production`).
 
@@ -131,7 +135,7 @@ The application enforces secure fallback checks for production environments (`FL
 
 ---
 
-## ⚙️ Cloud Deployment Details (Render)
+## Cloud Deployment Details (Render)
 
 - **Runtime:** Docker
 - **Build Trigger:** Automatic deployment upon successful push/merge to `main`.

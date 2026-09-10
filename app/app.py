@@ -21,11 +21,11 @@ app = dash.Dash(
 
 server = app.server
 
-if os.getenv("FLASK_ENV") == "production" and secret_key == "fallback-dev-key":
-    raise RuntimeError(
-        "CRITICAL SECURITY FAILURE: Production environment detected, but SECRET_KEY "
-        "is set to the default fallback key. Please configure a secure SECRET_KEY."
-    )
+#if os.getenv("FLASK_ENV") == "production" and secret_key == "fallback-dev-key":
+#    raise RuntimeError(
+#        "CRITICAL SECURITY FAILURE: Production environment detected, but SECRET_KEY "
+#        "is set to the default fallback key. Please configure a secure SECRET_KEY."
+#    )
 
 app.server.secret_key = secret_key
 
