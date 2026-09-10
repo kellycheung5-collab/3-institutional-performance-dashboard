@@ -9,8 +9,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application source
 COPY . .
 
-# Expose app port
-EXPOSE 8050
+# Expose default port
+EXPOSE 10000
 
-# Run Gunicorn binding to 0.0.0.0
-CMD ["gunicorn", "--bind", "0.0.0.0:8050", "--workers", "2", "--threads", "4", "app.app:server"]
+# Set Python module path
+ENV PYTHONPATH=/app
+
+# Bind dynamically to $PORT (defaults to 10000 on Render)
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-10000} --workers 2 --threads 4 app.app:server"]
