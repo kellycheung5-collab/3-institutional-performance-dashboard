@@ -44,31 +44,47 @@ The application is deployed live on Render and automatically updates whenever ch
 ├── .github/
 │   └── workflows/
 │       └── ci.yml              # GitHub Actions CI workflow 
-├── docs/
-│   └── assets/
+├── assets/
+│   └── images/                 # Dashboard screenshots for documentation and repository preview
 │       └── dashboard_preview.png
-config
+│       └── dashboard_table.png
 ├── app/
-│   ├── __init__.py
+│   ├── __init__.py             # Package initialization entry point
 │   ├── app.py                  # Main Dash layout & interactive callbacks
 │   └── data_loader.py          # SQLite database connection & query functions
 ├── data/
 │   └── raw/
 │       └── enrollment.db       # Relational SQLite database
+├── nginx/
+│   └── nginx.conf              # Reverse proxy configuration for port 10000
 ├── tests/
 │   ├── __init__.py
 │   └── test_app.py             # Pytest suite for queries & callbacks
+├── docker-compose.yml          # Multi-container orchestration (Dash + Nginx proxy)
 ├── Dockerfile                  # Container build instructions for Gunicorn
+├── gunicorn.conf.py            # Gunicorn WSGI server worker and binding configuration
+├── LICENSE                     # MIT Open-Source License
 ├── requirements.txt            # Python dependencies
 ├── README.md                   # Project documentation
-└── .gitignore
+└── .gitignore                  # Version control exclusion rules
 ```
 
 ---
 
 ## Local Development Setup
 
+### Prerequisites
+
+Ensure you have the following installed on your system:
+* [Python 3.12+](https://www.python.org/)
+* [Git](https://git-scm.com/)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required for Options 2 & 3)
+
+---
+
 ### Option 1: Standard Python Environment (Direct Execution)
+
+Run the application directly on your host machine using Python's built-in execution environment, binding Dash to port 8050 for rapid development and callback debugging.
 
 **1. Clone the repository:**
 
@@ -81,6 +97,7 @@ cd 3-institutional-performance-dashboard
 
 ```powershell
 python -m venv venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 .\venv\Scripts\Activate.ps1
 ```
 
@@ -93,12 +110,14 @@ pip install -r requirements.txt
 **4. Run the application locally:**
 
 ```powershell
-python app/app.py
+python -m app.app
 ```
 
 Access the dashboard at [http://127.0.0.1:8050/](http://127.0.0.1:8050/).
 
 ### Option 2: Local Docker Container (Without Nginx)
+
+Build and launch a single, isolated Docker container running Gunicorn on port 10000 to verify containerized application performance and dynamic port binding without external proxying.
 
 **1. Build the Docker image:**
 
@@ -114,18 +133,35 @@ docker run -d -p 10000:10000 --name bc-dashboard-standalone bc-performance-dashb
 
 Access the dashboard at [http://localhost:10000/](http://localhost:10000/).
 
-### Option 3: Local Docker Container (Without Nginx Reverse Proxy)
+**3. Stop and remove the container:**
 
-**1. Build the Docker image:**
+```powershell
+docker stop bc-dashboard-standalone
+docker rm bc-dashboard-standalone
+```
+
+### Option 3: Local Docker Container (Without Nginx Reverse Proxy)
 
 Test the production-like multi-container setup where Nginx listens on standard HTTP port 80 and proxies traffic to Gunicorn listening on port 10000.
 
+**1. Create a local `.env` file:**
+
+Create a `.env` file in the project root directory with the following variables:
+
+```env
+SECRET_KEY=local-dev-secret-key-12345
+FLASK_ENV=development
+DASH_DEBUG=False
+PORT=10000
+```
+
+**2. Launch the multi-container stack:**
 
 ```powershell
 docker-compose up -d --build
 ```
 
-**2. Verify container status:**
+**3. Verify container status:**
 
 ```powershell
 docker-compose ps
@@ -133,7 +169,7 @@ docker-compose ps
 
 Access the dashboard at [http://localhost/](http://localhost/).
 
-**3. Stop the stack:**
+**4. Stop the stack:**
 
 ```powershell
 docker-compose down
